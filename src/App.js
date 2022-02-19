@@ -43,6 +43,7 @@ function App() {
   const [query, setQuery] = useState("");
   const [weather, setWeather] = useState({});
   const [backgroundVideo, setBackgroundVideo] = useState("");
+  const [errorMessage,setErrorMessage]=useState('')
 
   const search = (e) => {
     if (e.key === "Enter") {
@@ -50,17 +51,18 @@ function App() {
         .then((res) => res.json())
         .then((result) => {
           setWeather(result);
-          if(result.weather){
+          
 
             setBackgroundVideo(`${result.weather[0].description}`);
             console.log(result);
-          }
-          else{
-            setBackgroundVideo('rain')
-          }
+          
           setQuery("");
           // document.querySelector("#myvid > source").src = `/videos/${}`
 
+        })
+        .catch((error) => {
+          setBackgroundVideo('rain')
+          setErrorMessage('not found')
         });
     }
   };
@@ -82,7 +84,6 @@ function App() {
         Your browser does not support the video tag.
       </video>
      
-      
       
         
         
@@ -118,8 +119,10 @@ function App() {
               ></path>
             </svg>
           </button>
-        </div>
-      </div>
+          
+          </div>
+          </div>
+          {!weather.main && <h1 className="text-7xl text-white text-shadow mt-12">{errorMessage}</h1>}
       {typeof weather.main !== "undefinde" &&
       typeof weather.sys !== "undefined" ? (
         <div>
