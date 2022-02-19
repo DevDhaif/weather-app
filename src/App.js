@@ -44,6 +44,10 @@ function App() {
   const [weather, setWeather] = useState({});
   const [backgroundVideo, setBackgroundVideo] = useState("");
   const [errorMessage,setErrorMessage]=useState('')
+  useEffect(()=>{
+  setBackgroundVideo('rain')
+
+  },[])
 
   const search = (e) => {
     if (e.key === "Enter") {
