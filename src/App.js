@@ -1,3 +1,4 @@
+import { render } from "@testing-library/react";
 import { useEffect, useState } from "react";
 import { Background } from "./components/Background";
 
@@ -49,33 +50,43 @@ function App() {
         .then((res) => res.json())
         .then((result) => {
           setWeather(result);
-          setBackgroundVideo(`${result.weather[0].description}`);
+          if(result.weather){
+
+            setBackgroundVideo(`${result.weather[0].description}`);
+            console.log(result);
+          }
+          else{
+            setBackgroundVideo('rain')
+          }
           setQuery("");
           // document.querySelector("#myvid > source").src = `/videos/${}`
 
         });
     }
   };
-
+ 
+  
   return (
     <div className="bg-gray-900/40 min-h-screen p-4">
       {/**Video Background */}
-      {typeof weather.main !== "undefinde" &&
-      typeof weather.sys !== "undefined" ? (
+      
         <video 
-          id="myvid"
-          autoPlay
-          loop
-          muted
-          src={`/videos/${backgroundVideo}.mp4`}
-          className="absolute  top-0 -z-10 opacity-90 left-0 w-full object-cover h-full filter blur-sm"
-        >
-          
-          Your browser does not support the video tag.
-        </video>
-      ) : (
-        ""
-      )}
+        id="myvid"
+        autoPlay
+        loop
+        muted
+        src={`/videos/${backgroundVideo}.mp4`}
+        className="absolute  top-0 -z-10 opacity-90 left-0 w-full object-cover h-full filter blur-sm"
+      >
+        
+        Your browser does not support the video tag.
+      </video>
+     
+      
+      
+        
+        
+      
       <div className="w-full flex justify-center">
         <div className="flex mx-3 opacity-80 shadow-lg hover:opacity-100 mt-2">
           <input
