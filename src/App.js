@@ -23,8 +23,8 @@ function App() {
   },[])
 
   const search = (e) => {
-    console.log(e.button);
-    if (e.key === "Enter" || (typeof e === 'object' && e.key=='0')) {
+    console.log(query);
+    
 
       fetch(`${apiUrl}weather?q=${query}&units=metric&APPID=${apiKey}`)
         .then((res) => res.json())
@@ -39,14 +39,18 @@ function App() {
           setBackgroundVideo('rain')
           setErrorMessage('not found')
         });
-    }
+    
   };
 
   const handleClick=()=>{
-    console.log(query);
-    search('sanaa')
+      
   }
- 
+  const handleChange=(e)=>{
+    setStates(State.getStatesOfCountry(`${e.target.value}`))
+    setQuery(`${e.target.value}`)
+    
+}
+
   
   return (
     <div className="bg-gray-900/40 min-h-screen p-4 xl:max-w-sm mx-auto">
@@ -65,6 +69,10 @@ function App() {
             value={query}
             onKeyPress={search}
           />
+          <button type="button" onClick={() => search(query)}>
+            Search
+        </button>
+          {/**
           <button
             className=" px-4 py-3  text-white   rounded-lg shadow-md  hover:shadow-lg   focus:shadow-lg focus:outline-none focus:ring-0 transition duration-150 ease-in-out  items-center"
             type="button"
@@ -87,11 +95,46 @@ function App() {
               ></path>
             </svg>
           </button>
-          
+           */}
           </div>
           </div>
+      
           {/** Drop dwon for countries  */}
-      <DropDown  countries={countries} />
+     
+     
+          <div className='felx flex-col w-full  mt-2 space-y-2'>
+        <div id="countries" >
+                <label htmlFor="countries" className=''>Country:</label>
+            
+                    <select className='w-44 ' name="countries" id="countries" onChange={handleChange}>
+                    {countries.map((country)=>(
+                        
+                        <option key={country.name} value={country.isoCoe} >{country.isoCode}</option>
+                        ))
+                    }
+                    </select> 
+                    
+            </div>
+
+            <div className='w-full'>
+                <label htmlFor="states">State:</label>
+
+                <select name="states" id="states" className='w-44' onChange={(e)=>setQuery(`${e.target.value.replace(`'`,'').replace('Governorate','')},${query}`)}>
+                        {states.map((state)=>(
+                            
+                    
+                    <option key={state.name} value={state.name}>{state.name}</option>
+                ))
+                }
+                </select> 
+            </div>
+      </div>
+
+
+
+
+
+
           {!weather.main && <h1 className="text-7xl text-white text-shadow mt-12">{errorMessage}</h1>}
       {typeof weather.main !== "undefinde" &&
       typeof weather.sys !== "undefined" ? (
