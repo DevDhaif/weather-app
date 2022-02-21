@@ -46,8 +46,9 @@ function App() {
       search(query)
   }
   const handleChange=(e)=>{   
-    setStates(State.getStatesOfCountry(`${e.target.value}`))
-    setQuery(`${e.target.value}`)
+    let t=e.target.value
+    setStates(State.getStatesOfCountry(`${t.slice(0,2)}`))
+    setQuery(`${t.slice(0,2)}`)
     e.target.value=''
 }
 
@@ -112,7 +113,7 @@ function App() {
                     <select className='w-44 ' name="countries" id="countries" onChange={handleChange}>
                     {countries.map((country)=>(
                         
-                        <option key={country.name} value={country.isoCoe} >{country.isoCode}</option>
+                        <option key={country.name} value={country.isoCoe} >{country.isoCode} {country.name} </option>
                         ))
                     }
                     </select> 
