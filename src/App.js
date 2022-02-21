@@ -10,7 +10,7 @@ const apiKey=process.env.REACT_APP_API_KEY;
 function App() {
   
   const [query, setQuery] = useState("");
-  const [weather, setWeather] = useState({});
+  const [weather, setWeather] = useState({}); 
   const [backgroundVideo, setBackgroundVideo] = useState("");
   const [errorMessage,setErrorMessage]=useState('')
   const [countries,setCountries]=useState([])
@@ -22,10 +22,10 @@ function App() {
   console.log(Country.getAllCountries());
   },[])
 
-  const search = (e) => {
+  function search (e) {
     console.log(query);
     
-
+    
       fetch(`${apiUrl}weather?q=${query}&units=metric&APPID=${apiKey}`)
         .then((res) => res.json())
         .then((result) => {
@@ -43,17 +43,18 @@ function App() {
   };
 
   const handleClick=()=>{
-      
+      search(query)
   }
-  const handleChange=(e)=>{
+  const handleChange=(e)=>{   
     setStates(State.getStatesOfCountry(`${e.target.value}`))
     setQuery(`${e.target.value}`)
-    
+    e.target.value=''
 }
 
   
   return (
     <div className="bg-gray-900/40 min-h-screen p-4 xl:max-w-sm mx-auto">
+    
     
       {/**Video Background */}
       
@@ -62,19 +63,20 @@ function App() {
       <div className="w-full flex justify-center">
         <div className="flex mx-3 opacity-80 shadow-lg hover:opacity-100 mt-2">
           <input
-            className=" appearance-none  shadow-gray-300 px-4 py-3  w-full  rounded-xl text-lg outline-none"
-            placeholder="search ..."
+            className=" appearance-none  shadow-gray-300 px-4 py-3  w-full  rounded-xl rounded-tr-none rounded-br-none text-lg outline-none"
+            placeholder="search ...(country,state or city)"
             type="text"
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={(e) =>{ setQuery(e.target.value) 
+              e.target.value='ssss'}}
             value={query}
-            onKeyPress={search}
+            onKeyPress={(e)=>(e.key === "Enter")? search(e.target.value):''}
           />
-          <button type="button" onClick={() => search(query)}>
+          <button className="text-xl text-white px-2 shadow-md rounded-tr-xl rounded-br-xl bg-gray-600 hover:shadow-lg   focus:shadow-lg focus:outline-none focus:ring-0 transition duration-150 ease-in-out  items-center" type="submit" onClick={handleClick}>
             Search
         </button>
           {/**
           <button
-            className=" px-4 py-3  text-white   rounded-lg shadow-md  hover:shadow-lg   focus:shadow-lg focus:outline-none focus:ring-0 transition duration-150 ease-in-out  items-center"
+            className=" px-4 py-3  text-white   rounded-lg "
             type="button"
             id="button-addon2"
             onClick={handleClick}
@@ -102,9 +104,10 @@ function App() {
           {/** Drop dwon for countries  */}
      
      
-          <div className='felx flex-col w-full  mt-2 space-y-2'>
-        <div id="countries" >
-                <label htmlFor="countries" className=''>Country:</label>
+          <div className='felx flex-col mt-2 space-y-4'>
+          <h1 className="text-xl text-center text-white">OR</h1>
+        <div id="countries" className="w-full flex justify-around">
+                <label htmlFor="countries" className='text-white text-xl'>Country:</label>
             
                     <select className='w-44 ' name="countries" id="countries" onChange={handleChange}>
                     {countries.map((country)=>(
@@ -116,10 +119,10 @@ function App() {
                     
             </div>
 
-            <div className='w-full'>
-                <label htmlFor="states">State:</label>
+            <div className='w-full flex justify-around '>
+                <label htmlFor="states" className="text-xl text-white">State:</label>
 
-                <select name="states" id="states" className='w-44' onChange={(e)=>setQuery(`${e.target.value.replace(`'`,'').replace('Governorate','')},${query}`)}>
+                <select name="states" id="states" className='w-44 ml-6' onChange={(e)=>setQuery(`${e.target.value.replace(`'`,'').replace('Governorate','')},${query}`)}>
                         {states.map((state)=>(
                             
                     
@@ -150,7 +153,7 @@ function App() {
             <h2 className="text-7xl text-shadow font-bold mx-8 my-auto  bg-gray-900/20 rounded-xl px-4 py-8  shadow-lg shadow-gray-700/50 ">
               {Math.floor(weather.main.temp)} C
             </h2>
-            <img className="w-12 h-12 bg-green-300" src={`http://openweathermap.org/img/w/${weather.weather[0].icon}.png`}/>
+            <img className="w-24 h-24 rounded-xl" src={`http://openweathermap.org/img/w/${weather.weather[0].icon}.png`}/>
             <h2 className="text-5xl font-semibold">
             {weather.weather[0].description}
             </h2>
